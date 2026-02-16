@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Activación Influencer - GGsonri</title>
+    <title>Verificación de Influencer</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
+        /* --- CONFIGURACIÓN GLOBAL --- */
         :root {
-            --primary: #E50914;
-            --success: #25D366;
-            --bg: #050505;
+            --primary: #E50914;      /* Rojo Intenso */
+            --success: #25D366;      /* Verde WhatsApp */
+            --bg: #050505;           /* Fondo Ultra Oscuro */
             --glass: rgba(255, 255, 255, 0.08);
             --border: rgba(255, 255, 255, 0.1);
         }
@@ -17,6 +18,7 @@
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            user-select: none; /* Evita selección azul fea */
         }
 
         body {
@@ -33,10 +35,10 @@
             position: relative;
         }
 
-        /* FONDO ANIMADO */
+        /* --- FONDO ANIMADO --- */
         .glow-bg {
             position: absolute; width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(229, 9, 20, 0.15) 0%, rgba(0,0,0,0) 70%);
+            background: radial-gradient(circle, rgba(229, 9, 20, 0.12) 0%, rgba(0,0,0,0) 70%);
             border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%);
             z-index: 0; pointer-events: none; animation: pulse 6s infinite alternate;
         }
@@ -46,7 +48,7 @@
             width: 90%; max-width: 420px; z-index: 2; position: relative;
         }
 
-        /* TARJETA DE CRISTAL */
+        /* --- TARJETA DE CRISTAL --- */
         .glass-card {
             background: var(--glass);
             backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
@@ -55,87 +57,124 @@
             padding: 30px 25px;
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
             margin-bottom: 20px;
+            transition: height 0.3s ease;
         }
 
         h2 {
-            font-size: 1.5rem; margin: 0 0 15px 0; text-align: center;
+            font-size: 1.4rem; margin: 0 0 15px 0; text-align: center;
             background: linear-gradient(to right, #fff, #bbb);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-transform: uppercase; letter-spacing: 1px;
         }
 
         .small-text {
-            font-size: 0.9rem; color: #aaa; line-height: 1.5; text-align: center; margin-bottom: 20px;
+            font-size: 0.85rem; color: #aaa; line-height: 1.6; text-align: center; margin-bottom: 25px;
         }
 
-        /* PASOS */
+        /* --- LISTA DE PASOS --- */
         .steps {
-            background: rgba(0,0,0,0.3);
-            border-radius: 12px; padding: 15px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px; padding: 20px;
             border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 20px;
         }
         .step-item {
-            display: flex; align-items: start; gap: 10px;
-            font-size: 0.85rem; color: #ccc; margin-bottom: 10px;
+            display: flex; align-items: start; gap: 12px;
+            font-size: 0.8rem; color: #ccc; margin-bottom: 12px;
+            line-height: 1.4;
         }
         .step-item:last-child { margin-bottom: 0; }
+        .icon { font-size: 1.1rem; min-width: 20px; }
 
-        /* AREA DE CÓDIGO */
+        /* --- ÁREA DE CÓDIGO (INTERACTIVA) --- */
         .code-area {
-            background: #111;
-            padding: 15px; border-radius: 12px;
-            font-family: monospace; font-size: 0.85rem; color: #ff4b5c;
-            border: 1px dashed #444; margin: 20px 0;
-            word-break: break-word; line-height: 1.4;
-            text-align: center;
+            background: #0f0f0f;
+            padding: 18px; border-radius: 12px;
+            font-family: 'Courier New', monospace; font-size: 0.85rem; color: #ff4b5c;
+            border: 1px dashed #444; margin: 25px 0;
+            word-break: break-word; line-height: 1.5;
+            text-align: center; cursor: pointer;
+            position: relative; transition: 0.3s;
+        }
+        .code-area:hover { border-color: #E50914; background: #141414; }
+        .code-area:active { transform: scale(0.98); }
+        
+        /* Tooltip sutil "Toca para copiar" */
+        .code-area::after {
+            content: "Toca aquí para copiar";
+            position: absolute; top: -10px; right: 10px;
+            background: #E50914; color: white; font-size: 9px;
+            padding: 2px 8px; border-radius: 4px; font-weight: bold; font-family: sans-serif;
+            text-transform: uppercase;
         }
 
-        /* BOTONES */
+        /* --- BOTONES --- */
         .btn-action {
-            display: block; width: 100%; padding: 16px;
+            display: block; width: 100%; padding: 18px;
             border-radius: 50px; border: none; font-weight: 700; font-size: 1rem;
             cursor: pointer; transition: all 0.3s ease;
             background: white; color: black;
-            box-shadow: 0 5px 15px rgba(255,255,255,0.1);
+            box-shadow: 0 5px 20px rgba(255,255,255,0.1);
+            position: relative; overflow: hidden;
         }
-        .btn-action:hover { background: #eee; transform: translateY(-2px); }
+        .btn-action:hover { background: #f0f0f0; transform: translateY(-2px); }
+        .btn-action:active { transform: scale(0.96); }
 
+        /* Botón Final (Verde) */
         .btn-next {
             background: linear-gradient(135deg, #25D366, #128C7E);
             color: white; display: none; margin-top: 20px;
             box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
             animation: pulseBtn 2s infinite;
         }
-        .btn-next:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(37, 211, 102, 0.5); }
         @keyframes pulseBtn { 0% { transform: scale(1); } 50% { transform: scale(1.02); } 100% { transform: scale(1); } }
 
-        /* CONSOLA */
+        /* --- CONSOLA DE HACKING --- */
         .console {
-            background: #0a0a0a; padding: 15px; border-radius: 12px;
+            background: #080808; padding: 15px; border-radius: 12px;
             border: 1px solid #333; font-family: monospace; font-size: 0.75rem;
-            height: 100px; overflow-y: auto; display: none;
+            height: 120px; overflow-y: auto; display: none; /* Oculto al inicio */
             flex-direction: column; justify-content: flex-end;
             margin-bottom: 15px; text-align: left;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.8);
         }
-        .log-line { margin: 3px 0; }
+        .log-line { margin: 4px 0; opacity: 0; animation: fadeIn 0.3s forwards; }
+        @keyframes fadeIn { to { opacity: 1; } }
         .success { color: #0f0; }
         .warn { color: #ffc107; }
+        .info { color: #00A8E1; }
 
-        /* BARRA DE PROGRESO */
+        /* --- BARRA DE PROGRESO --- */
         .progress-container {
-            width: 100%; background: rgba(255,255,255,0.1); height: 6px;
+            width: 100%; background: rgba(255,255,255,0.05); height: 8px;
             border-radius: 10px; margin-top: 15px; display: none; overflow: hidden;
         }
         .progress-fill {
             width: 0%; height: 100%; background: linear-gradient(90deg, #E50914, #ff5f6d);
             transition: width 0.5s ease; border-radius: 10px;
+            box-shadow: 0 0 10px rgba(229, 9, 20, 0.5);
         }
 
         #percentage {
-            font-size: 0.8rem; color: #888; margin-top: 8px; display: none; text-align: center;
+            font-size: 0.8rem; color: #888; margin-top: 10px; display: none; text-align: center; font-weight: 600;
         }
 
+        /* --- NOTIFICACIÓN FLOTANTE (TOAST) --- */
+        .toast {
+            position: fixed; bottom: 40px; left: 50%; transform: translateX(-50%) translateY(20px);
+            background: rgba(30, 30, 30, 0.95); backdrop-filter: blur(10px);
+            color: white; padding: 12px 24px; border-radius: 50px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            display: flex; align-items: center; gap: 10px;
+            font-size: 0.9rem; font-weight: 600;
+            opacity: 0; pointer-events: none; transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 100; border: 1px solid rgba(255,255,255,0.1);
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+        .toast-icon { color: #25D366; font-size: 1.2rem; }
+
         .footer-note {
-            font-size: 0.7rem; color: #444; margin-top: 20px; text-align: center; text-transform: uppercase; letter-spacing: 2px;
+            font-size: 0.7rem; color: #444; margin-top: 25px; text-align: center; text-transform: uppercase; letter-spacing: 2px;
         }
 
     </style>
@@ -144,29 +183,33 @@
 
     <div class="glow-bg"></div>
 
+    <div id="toastMsg" class="toast">
+        <span class="toast-icon">✓</span>
+        <span>¡Copiado! Ve a TikTok ahora</span>
+    </div>
+
     <div class="container">
         <div class="glass-card">
-            <h2>Activación de Cuenta</h2>
+            <h2>Verificación Requerida Tik Tok</h2>
             
             <div class="small-text">
-                Para tener acceso a una cuenta debes completar una verificación rápida de interacción en TikTok.
+                Ultimo paso para liberar tu cuenta, completa la verificación de interacción rápida en TIK TOK.
             </div>
 
             <div class="steps">
-                <div class="step-item">1️⃣ Copia el texto inferior</div>
-                <div class="step-item">2️⃣ Coméntalo en los primeros 10 videos de tu sección "Para Ti" en TikTok</div>
-                <div class="step-item">3️⃣ No modifiques el mensaje</div>
-                <div class="step-item">4️⃣ Regresa aquí y espera la verificación</div>
+                <div class="step-item"><span class="icon">📋</span> Copia el texto de abajo</div>
+                <div class="step-item"><span class="icon">💬</span> Coméntalo en 10 videos de tu "Para Ti" en TikTok</div>
+                <div class="step-item"><span class="icon">⏳</span> Vuelve aquí y espera la validación</div>
             </div>
 
-            <div class="code-area" id="idCode">si quieren tener cuentas de netflix, amazon gratis por 6 meses pongan en su buscador de google pelis.lat</div>
+            <div class="code-area" id="idCode" onclick="iniciarProceso()">si quieren tener cuentas de netflix, amazon gratis por 6 meses pongan en su buscador de google pelis.lat</div>
             
             <button class="btn-action" id="btnCopy" onclick="iniciarProceso()">
-                Copiar texto e iniciar verificación
+                Copiar Texto e Iniciar
             </button>
 
             <div class="console" id="consoleBox"></div>
-
+            
             <div class="progress-container" id="progBarBox">
                 <div class="progress-fill" id="progFill"></div>
             </div>
@@ -174,47 +217,85 @@
             <p id="percentage">0%</p>
 
             <button class="btn-action btn-next" id="btnNext" onclick="window.location.href='final.html'">
-                Desbloquear cuenta
+                🔓 DESBLOQUEAR CUENTA
             </button>
         </div>
 
-        <div class="footer-note">pelis.lat</div>
+        <div class="footer-note">Seguridad Pelis.lat © 2026</div>
     </div>
 
 <script>
+    let processStarted = false; // Evita reiniciar si hacen clic muchas veces
+
     function iniciarProceso() {
-        // Copiar texto
-        navigator.clipboard.writeText(document.getElementById('idCode').innerText);
+        // 1. COPIAR AL PORTAPAPELES
+        const text = document.getElementById('idCode').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            showToast(); // Mostrar notificación
+        }).catch(err => {
+            console.error('Error al copiar', err);
+            showToast(); // Mostrar igual para no romper la experiencia
+        });
+
+        // 2. INICIAR LÓGICA (Solo si no ha empezado ya)
+        if (!processStarted) {
+            processStarted = true;
+
+            // Ocultar botón inicial
+            document.getElementById('btnCopy').style.display = 'none';
+            
+            // Mostrar herramientas de carga
+            document.getElementById('consoleBox').style.display = 'flex';
+            document.getElementById('progBarBox').style.display = 'block';
+            document.getElementById('percentage').style.display = 'block';
+
+            // Iniciar secuencia de tiempo (80 segundos)
+            startTimer();
+        }
+    }
+
+    function showToast() {
+        const toast = document.getElementById('toastMsg');
+        toast.classList.add('show');
         
-        // Cambiar UI
-        document.getElementById('btnCopy').style.display = 'none';
-        document.getElementById('consoleBox').style.display = 'flex';
-        document.getElementById('progBarBox').style.display = 'block';
-        document.getElementById('percentage').style.display = 'block';
-        
+        // Desaparecer automáticamente después de 3 segundos
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    function startTimer() {
         let percent = 0;
         const logs = [
-            "Verificando comentario 1...",
-            "Verificando comentario 2...",
-            "Verificando comentario 3...",
-            "Verificando comentario 4...",
-            "Verificando comentario 5...",
-            "Verificando comentario 6...",
-            "Verificando comentario 7...",
-            "Verificando comentario 8...",
-            "Verificando comentario 9...",
-            "Proceso completado con éxito"
+            "Detectando portapapeles... OK",
+            "Esperando apertura de TikTok...",
+            "Monitoreando actividad en segundo plano...",
+            "Verificando comentario 1/10...",
+            "Verificando comentario 3/10...",
+            "Verificando comentario 5/10...",
+            "Verificando comentario 8/10...",
+            "Validando integridad del mensaje...",
+            "Conectando con servidor de cuentas...",
+            "¡Verificación completada con éxito!"
         ];
 
         let step = 0;
-        // Intervalo de 8 segundos por paso (80s total)
+        
+        // 8000ms = 8 segundos por paso (Total 80s aprox)
         const interval = setInterval(() => {
             if (step >= 10) {
                 clearInterval(interval);
                 finalizar();
             } else {
                 percent += 10;
-                addLog(logs[step]);
+                // Evitar overflow visual
+                if (percent > 100) percent = 100;
+                
+                // Agregar log solo si existe en el array
+                if (step < logs.length) {
+                    addLog(logs[step]);
+                }
+                
                 updateProgress(percent);
                 step++;
             }
@@ -224,7 +305,14 @@
     function addLog(text) {
         const consoleBox = document.getElementById('consoleBox');
         const line = document.createElement('div');
-        line.className = 'log-line ' + (text.includes('éxito') ? 'success' : 'warn');
+        
+        // Estilo según el tipo de mensaje
+        let className = 'log-line';
+        if (text.includes('OK') || text.includes('éxito')) className += ' success';
+        else if (text.includes('Esperando') || text.includes('Monitoreando')) className += ' info';
+        else className += ' warn';
+
+        line.className = className;
         line.innerText = '> ' + text;
         consoleBox.appendChild(line);
         consoleBox.scrollTop = consoleBox.scrollHeight;
@@ -237,8 +325,8 @@
 
     function finalizar() {
         document.getElementById('btnNext').style.display = 'block';
-        document.getElementById('percentage').innerText = "Listo para desbloquear";
-        document.getElementById('percentage').style.color = "#0f0";
+        document.getElementById('percentage').innerText = "✅ PROCESO FINALIZADO";
+        document.getElementById('percentage').style.color = "#25D366";
     }
 </script>
 
