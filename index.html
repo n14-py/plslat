@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pelis.lat | Exclusive Access</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --netflix: #E50914;
+            --amazon: #00A8E1;
+            --hbo: #9933ff;
+            --bg: #050505;
+            --glass: rgba(255, 255, 255, 0.08);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            margin: 0; padding: 0;
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Fondo Animado de Luces */
+        .ambient-light {
+            position: absolute;
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(229,9,20,0.15) 0%, rgba(0,0,0,0) 70%);
+            top: -20%; left: -10%;
+            border-radius: 50%;
+            animation: float 10s infinite alternate;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .ambient-light.blue {
+            background: radial-gradient(circle, rgba(0,168,225,0.1) 0%, rgba(0,0,0,0) 70%);
+            top: auto; bottom: -20%; left: auto; right: -10%;
+            animation-delay: -5s;
+        }
+
+        @keyframes float { 0% { transform: translate(0, 0) scale(1); } 100% { transform: translate(50px, 50px) scale(1.1); } }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 90%;
+            max-width: 450px;
+            padding-bottom: 50px;
+        }
+
+        /* Encabezado */
+        header { text-align: center; margin-bottom: 40px; }
+        .badge {
+            background: linear-gradient(90deg, #ff0000, #ff4444);
+            padding: 5px 12px; border-radius: 20px;
+            font-size: 10px; font-weight: 800; letter-spacing: 1px;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px rgba(255,0,0,0.4);
+            display: inline-block; margin-bottom: 15px;
+        }
+        h1 {
+            font-size: 2.8rem; margin: 0; line-height: 1.1;
+            background: linear-gradient(to bottom, #fff, #999);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        p.sub { color: #666; font-size: 0.95rem; margin-top: 10px; font-weight: 400; }
+
+        /* Tarjetas de Plataforma */
+        .platform-card {
+            background: var(--glass);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 20px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Efecto Hover Premium */
+        .platform-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(120deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: translateX(-100%); transition: 0.6s;
+        }
+        .platform-card:hover::before { transform: translateX(100%); }
+        .platform-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            border-color: rgba(255,255,255,0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+        }
+        .platform-card:active { transform: scale(0.98); }
+
+        /* Estilos específicos por tarjeta */
+        .platform-card.netflix:hover { border-color: var(--netflix); box-shadow: 0 10px 40px rgba(229, 9, 20, 0.2); }
+        .platform-card.amazon:hover { border-color: var(--amazon); box-shadow: 0 10px 40px rgba(0, 168, 225, 0.2); }
+
+        .logo-box {
+            width: 60px; height: 60px;
+            border-radius: 16px;
+            background: #000;
+            display: flex; align-items: center; justify-content: center;
+            margin-right: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .logo-img { width: 100%; height: 100%; object-fit: cover; border-radius: 16px; }
+
+        .info { flex: 1; }
+        .info h3 { margin: 0; font-size: 1.2rem; font-weight: 700; }
+        .info span { font-size: 0.8rem; color: #888; display: block; margin-top: 4px; }
+        
+        .btn-arrow {
+            width: 40px; height: 40px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+            transition: 0.3s;
+        }
+        .platform-card:hover .btn-arrow { background: white; color: black; transform: rotate(-45deg); }
+
+        /* Footer */
+        .footer {
+            position: absolute; bottom: 20px;
+            font-size: 0.7rem; color: #333;
+            text-align: center; width: 100%;
+        }
+
+        /* Notificación Flotante */
+        .live-user {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.8); padding: 8px 16px; border-radius: 30px;
+            font-size: 0.75rem; border: 1px solid #333; display: flex; align-items: center; gap: 8px;
+            z-index: 10; animation: fadeInDown 1s ease;
+        }
+        .dot { width: 8px; height: 8px; background: #0f0; border-radius: 50%; box-shadow: 0 0 10px #0f0; }
+
+        @keyframes fadeInDown { from { opacity: 0; transform: translate(-50%, -20px); } to { opacity: 1; transform: translate(-50%, 0); } }
+
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light"></div>
+    <div class="ambient-light blue"></div>
+
+    <div class="live-user">
+        <div class="dot"></div> 148 personas están eligiendo ahora
+    </div>
+
+    <div class="container">
+        <header>
+            <div class="badge">STOCK LIMITADO 2026</div>
+            <h1>Regalos<br>Premium</h1>
+            <p class="sub">Selecciona tu plataforma favorita para comenzar.</p>
+        </header>
+
+        <div class="platform-card netflix" onclick="goToStep1('Netflix')">
+            <div class="logo-box">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsZLFW9PjmQSTrcc-BfDZL_8ENLgsuz3Ov0g&s" class="logo-img">
+            </div>
+            <div class="info">
+                <h3>Netflix 4K</h3>
+                <span style="color: #ff5f5f;">6 Meses • Plan Premium</span>
+            </div>
+            <div class="btn-arrow">➜</div>
+        </div>
+
+        <div class="platform-card amazon" onclick="goToStep1('Amazon')">
+            <div class="logo-box">
+                <img src="https://play-lh.googleusercontent.com/04rBJNzGde7ZS3Il2UTM-xZ1HueDTTiHiYzGtl2Ie_INZM-JK-n1EVKI5J74ZFgCGPg" class="logo-img">
+            </div>
+            <div class="info">
+                <h3>Amazon Prime</h3>
+                <span style="color: #5fafff;">1 Año • Peliculas Gratis</span>
+            </div>
+            <div class="btn-arrow">➜</div>
+        </div>
+
+        <div class="platform-card" style="border-color: rgba(17, 60, 207, 0.3);" onclick="goToStep1('Disney')">
+            <div class="logo-box" style="background: linear-gradient(45deg, #113CCF, #fff);">
+                <img src="https://www.personal.com.py/img/disney-plus/disney-logo-fondo.png" class="logo-img" style="object-fit: contain; padding: 5px;">
+            </div>
+            <div class="info">
+                <h3>Disney+</h3>
+                <span>Todo Marvel & Star Wars</span>
+            </div>
+            <div class="btn-arrow">➜</div>
+        </div>
+
+    </div>
+
+    <div class="footer">© 2026 Pelis.lat Official Rewards System</div>
+
+    <script>
+        function goToStep1(platform) {
+            // Guardar preferencia (opcional para uso futuro)
+            localStorage.setItem('selected_platform', platform);
+            // Redirigir
+            window.location.href = 'paso1_whatsapp.html';
+        }
+    </script>
+</body>
+</html>
