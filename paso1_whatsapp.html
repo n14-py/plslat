@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Verificación Humana</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { background: #0f0f0f; color: white; font-family: 'Poppins', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+        .container { width: 85%; max-width: 400px; }
+        
+        .icon-box { font-size: 3rem; margin-bottom: 20px; animation: bounce 2s infinite; }
+        h2 { margin-bottom: 10px; }
+        p { color: #888; font-size: 0.9rem; margin-bottom: 30px; }
+
+        .btn-wa {
+            background: #25D366; color: white; text-decoration: none; padding: 18px; width: 100%; display: block;
+            border-radius: 12px; font-weight: 600; font-size: 1rem; box-shadow: 0 5px 20px rgba(37, 211, 102, 0.4);
+            transition: 0.2s; box-sizing: border-box; cursor: pointer;
+        }
+        .btn-wa:active { transform: scale(0.95); }
+        .btn-wa:hover { background: #1ebe57; }
+
+        .progress-bar { width: 100%; background: #333; height: 8px; border-radius: 10px; margin-top: 30px; overflow: hidden; }
+        .fill { width: 0%; height: 100%; background: #25D366; transition: width 0.5s; }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="icon-box">🛡️</div>
+    <h2>Activar Sistema</h2>
+    <p>Para desbloquear el generador, invita a amigos a obtener sus cuentas gratis.</p>
+
+    <a href="https://api.whatsapp.com/send?text=¡Hola! Obtén cuenta de Netflix, Amazon y más totalmente GRATIS aquí 😱 👉 www.pelis.lat" 
+       class="btn-wa" 
+       target="_blank" 
+       onclick="trackShare()">
+       📲 Compartir en WhatsApp (<span id="count">0</span>/3)
+    </a>
+
+    <div class="progress-bar"><div class="fill" id="fill"></div></div>
+    <p id="status" style="font-size: 12px; margin-top: 10px; color: #555;">Esperando acción...</p>
+</div>
+
+<script>
+    let shares = 0;
+    
+    function trackShare() {
+        // El usuario ya hizo clic y se abrió la nueva pestaña.
+        // Aquí esperamos un poco para simular que el sistema detecta el envío.
+        
+        setTimeout(() => {
+            shares++;
+            
+            // Actualizar contador visual
+            document.getElementById('count').innerText = shares;
+            
+            // Actualizar barra de progreso (33% por cada clic)
+            let percentage = (shares / 3) * 100;
+            if(percentage > 100) percentage = 100;
+            document.getElementById('fill').style.width = percentage + "%";
+            
+            if(shares < 3) {
+                document.getElementById('status').innerText = `Faltan ${3-shares} compartidas más.`;
+            } else {
+                document.getElementById('status').innerText = "✅ Verificado con éxito.";
+                document.getElementById('status').style.color = "#25D366";
+                
+                // Redirigir al siguiente paso
+                setTimeout(() => {
+                    window.location.href = 'paso2_captura.html';
+                }, 1500);
+            }
+        }, 3000); // Esperamos 3 segundos para darle tiempo de "compartir"
+    }
+</script>
+
+</body>
+</html>

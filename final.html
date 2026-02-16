@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>¡Éxito! Cuenta Generada</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #00e676; --bg: #000; }
+        body {
+            background-color: var(--bg); color: white;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            overflow: hidden; margin: 0;
+            text-align: center;
+        }
+
+        /* Confeti animado (simple CSS) */
+        .confetti {
+            position: absolute; width: 10px; height: 10px; background: #f00;
+            animation: fall 3s linear infinite; top: -10%; z-index: 0;
+        }
+        @keyframes fall { to { transform: translateY(110vh) rotate(720deg); } }
+
+        .container { z-index: 2; width: 85%; max-width: 400px; position: relative; }
+
+        h1 {
+            font-size: 2.5rem; color: var(--primary);
+            text-shadow: 0 0 30px rgba(0, 230, 118, 0.4);
+            margin-bottom: 10px;
+        }
+        p { color: #aaa; margin-bottom: 40px; font-size: 1rem; }
+
+        /* Tarjeta de Credenciales */
+        .credential-card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 30px 20px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+        }
+
+        .field-label {
+            display: block; font-size: 0.75rem; color: #888;
+            text-transform: uppercase; letter-spacing: 1.5px;
+            margin-bottom: 8px; margin-top: 20px;
+        }
+        .field-label:first-child { margin-top: 0; }
+
+        .data-box {
+            background: rgba(0,0,0,0.4);
+            padding: 12px; border-radius: 8px;
+            font-family: monospace; font-size: 1.1rem; color: #fff;
+            border: 1px dashed #444; word-break: break-all;
+        }
+
+        .blur-text {
+            color: transparent; text-shadow: 0 0 12px #fff;
+            user-select: none; transition: 0.3s;
+        }
+
+        /* Botón Principal */
+        .btn-main {
+            display: block; width: 100%; padding: 20px; margin-top: 30px;
+            border-radius: 50px; text-decoration: none;
+            background: linear-gradient(90deg, #E50914, #ff4b5c);
+            color: white; font-weight: 800; font-size: 1.1rem;
+            box-shadow: 0 10px 30px rgba(229, 9, 20, 0.4);
+            transition: transform 0.2s;
+            border: none; cursor: pointer;
+            position: relative; overflow: hidden;
+        }
+        .btn-main:active { transform: scale(0.95); }
+        .btn-main::after {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(rgba(255,255,255,0.2), transparent);
+        }
+
+        /* Botón Secundario (Volver) */
+        .btn-back {
+            display: block; margin-top: 20px;
+            background: transparent; border: 1px solid #333;
+            color: #666; padding: 12px; width: 100%;
+            border-radius: 12px; font-size: 0.9rem;
+            cursor: pointer; transition: 0.3s;
+        }
+        .btn-back:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.05); }
+
+    </style>
+</head>
+<body>
+
+    <div id="confetti-container"></div>
+
+    <div class="container">
+        <h1>¡Felicidades!</h1>
+        <p>Tu cuenta premium ha sido reservada.</p>
+
+        <div class="credential-card">
+            <span class="field-label">Usuario Generado</span>
+            <div class="data-box" id="emailDisplay">generando...</div>
+
+            <span class="field-label">Contraseña Temporal</span>
+            <div class="data-box blur-text">Xh7#mP9@Lk</div>
+            
+            <div style="font-size: 0.7rem; color: #E50914; margin-top: 8px;">
+                ⚠️ Haz clic abajo para revelar
+            </div>
+        </div>
+
+        <a href="https://omg10.com/4/10264247" target="_blank" class="btn-main" id="unlockBtn" onclick="return handleClick(event)">
+            VER CONTRASEÑA AHORA 🔓
+        </a>
+
+        <button class="btn-back" onclick="window.location.href='index.html'">
+            ↩ Volver al Inicio
+        </button>
+    </div>
+
+    <script>
+        // 1. Generador de Email Aleatorio
+        const names = ["cine", "series", "stream", "ultra", "mega", "play", "hbo", "net", "prime", "movie", "film", "dark", "night", "pro", "master", "vip"];
+        const suffixes = ["fan", "lover", "addict", "watcher", "247", "hd", "4k", "plus", "go", "max", "x"];
+        
+        function getEmail() {
+            const n = names[Math.floor(Math.random() * names.length)];
+            const s = suffixes[Math.floor(Math.random() * suffixes.length)];
+            const r = Math.floor(Math.random() * 9999);
+            return `${n}${s}${r}@gmail.com`;
+        }
+        document.getElementById('emailDisplay').innerText = getEmail();
+
+        // 2. Lógica del Contador de Clics (5 clics URL -> 6º clic Index)
+        let clickCount = 0;
+        
+        function handleClick(event) {
+            clickCount++;
+            console.log("Clic número: " + clickCount);
+            
+            if (clickCount >= 6) {
+                // Prevenir que abra el enlace y redirigir al index
+                event.preventDefault(); 
+                window.location.href = 'index.html';
+                return false;
+            }
+            
+            // Si son los primeros 5 clics, deja que el enlace funcione (target="_blank")
+            // y no hace nada más.
+            return true;
+        }
+
+        // 3. Confeti Sencillo
+        const colors = ['#f00', '#0f0', '#00f', '#ff0', '#0ff'];
+        for(let i=0; i<30; i++) {
+            let d = document.createElement('div');
+            d.className = 'confetti';
+            d.style.left = Math.random()*100 + '%';
+            d.style.animationDuration = (Math.random()*3 + 2) + 's';
+            d.style.background = colors[Math.floor(Math.random()*colors.length)];
+            document.body.appendChild(d);
+        }
+    </script>
+
+</body>
+</html>

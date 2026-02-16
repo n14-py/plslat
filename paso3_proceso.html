@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activación Influencer - GGsonri</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            background: linear-gradient(180deg, #0f0f0f, #000); 
+            color: white; 
+            font-family: 'Poppins', sans-serif; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            height: 100vh; 
+            margin: 0; 
+        }
+
+        .container { 
+            width: 92%; 
+            max-width: 420px; 
+            text-align: center; 
+        }
+
+        h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+        }
+
+        .card {
+            background: #111;
+            padding: 15px;
+            border-radius: 15px;
+            border: 1px solid #222;
+            margin-bottom: 15px;
+        }
+
+        .small-text {
+            font-size: 13px;
+            color: #bbb;
+            line-height: 1.4;
+        }
+
+        .steps {
+            text-align: left;
+            font-size: 13px;
+            color: #ddd;
+            margin-top: 8px;
+        }
+
+        .steps div {
+            margin-bottom: 6px;
+        }
+
+        .code-area { 
+            background: #1a1a1a; 
+            padding: 12px; 
+            border-radius: 10px; 
+            font-family: monospace; 
+            color: #E50914; 
+            border: 1px solid #333; 
+            font-size: 13px;
+            margin-bottom: 15px;
+        }
+
+        .btn-action { 
+            background: white; 
+            color: black; 
+            border: none; 
+            padding: 14px; 
+            width: 100%; 
+            border-radius: 50px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            font-size: 14px; 
+            margin-bottom: 15px; 
+            transition: 0.3s; 
+        }
+
+        .btn-action:hover { background: #ddd; }
+
+        .btn-next { 
+            background: #28a745; 
+            color: white; 
+            display: none; 
+            animation: pulse 1.5s infinite; 
+        }
+
+        .console { 
+            background: #0d0d0d; 
+            padding: 12px; 
+            border-radius: 10px; 
+            text-align: left; 
+            font-family: monospace; 
+            font-size: 11px; 
+            height: 90px; 
+            overflow: hidden; 
+            border: 1px solid #222; 
+            display: none; 
+            flex-direction: column; 
+            justify-content: flex-end; 
+            margin-bottom: 10px;
+        }
+
+        .log-line { margin: 2px 0; }
+        .success { color: #0f0; }
+        .warn { color: #f0c000; }
+        
+        .progress-container { 
+            width: 100%; 
+            background: #222; 
+            height: 8px; 
+            border-radius: 5px; 
+            margin-top: 8px; 
+            display: none; 
+        }
+
+        .progress-fill { 
+            width: 0%; 
+            height: 100%; 
+            background: linear-gradient(90deg, #E50914, #ff5f6d); 
+            transition: width 0.5s; 
+            border-radius: 5px; 
+        }
+
+        #percentage {
+            font-size: 11px;
+            color: #888;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .footer-note {
+            font-size: 10px;
+            color: #666;
+            margin-top: 10px;
+        }
+
+        @keyframes pulse { 
+            0% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.6); } 
+            70% { box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); } 
+            100% { box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); } 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <h2>Activación de Cuenta</h2>
+
+    <div class="card">
+        <div class="small-text">
+            Para tener acceso a una cuenta debes completar una verificación rápida de interacción en tik tok.
+        </div>
+
+        <div class="steps">
+            <div>1️⃣ Copia el texto inferior</div>
+            <div>2️⃣ Coméntalo en los primeros 10 videos de tu sección "Para Ti" en tik tok</div>
+            <div>3️⃣ No modifiques el mensaje</div>
+            <div>4️⃣ Regresa aquí y espera la verificación</div>
+        </div>
+    </div>
+
+    <div class="code-area" id="idCode">
+si quieren tener cuentas de netflix, amazon gratis por 6 meses pongan en su buscador de google pelis.lat 
+    </div>
+    
+    <button class="btn-action" id="btnCopy" onclick="iniciarProceso()">
+        Copiar texto e iniciar verificación
+    </button>
+
+    <div class="console" id="consoleBox"></div>
+
+    <div class="progress-container" id="progBarBox">
+        <div class="progress-fill" id="progFill"></div>
+    </div>
+
+    <p id="percentage">0%</p>
+
+    <button class="btn-action btn-next" id="btnNext" onclick="window.location.href='final.html'">
+        Desbloquear cuenta
+    </button>
+
+    <div class="footer-note">
+        pelis.lat
+    </div>
+
+</div>
+
+<script>
+    function iniciarProceso() {
+        navigator.clipboard.writeText(document.getElementById('idCode').innerText);
+        
+        document.getElementById('btnCopy').style.display = 'none';
+        document.getElementById('consoleBox').style.display = 'flex';
+        document.getElementById('progBarBox').style.display = 'block';
+        document.getElementById('percentage').style.display = 'block';
+        
+        let percent = 0;
+        const logs = [
+            "Verificando comentario 1...",
+            "Verificando comentario 2...",
+            "Verificando comentario 3...",
+            "Verificando comentario 4...",
+            "Verificando comentario 5...",
+            "Verificando comentario 6...",
+            "Verificando comentario 7...",
+            "Verificando comentario 8...",
+            "Verificando comentario 9...",
+            "Proceso completado con éxito"
+        ];
+
+        let step = 0;
+        const interval = setInterval(() => {
+            if (step >= 10) {
+                clearInterval(interval);
+                finalizar();
+            } else {
+                percent += 10;
+                addLog(logs[step]);
+                updateProgress(percent);
+                step++;
+            }
+        }, 8000);
+    }
+
+    function addLog(text) {
+        const consoleBox = document.getElementById('consoleBox');
+        const line = document.createElement('div');
+        line.className = 'log-line ' + (text.includes('éxito') ? 'success' : 'warn');
+        line.innerText = '> ' + text;
+        consoleBox.appendChild(line);
+        consoleBox.scrollTop = consoleBox.scrollHeight;
+    }
+
+    function updateProgress(num) {
+        document.getElementById('progFill').style.width = num + "%";
+        document.getElementById('percentage').innerText = num + "% completado";
+    }
+
+    function finalizar() {
+        document.getElementById('btnNext').style.display = 'block';
+        document.getElementById('percentage').innerText = "Listo para desbloquear";
+        document.getElementById('percentage').style.color = "#0f0";
+    }
+</script>
+
+</body>
+</html>
