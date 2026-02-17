@@ -16,8 +16,7 @@
     <meta property="og:title" content="🎁 Regalo: Cuentas Premium Gratis">
     <meta property="og:description" content="Entra ahora y reclama tu cuenta de Netflix o Amazon antes de que se agoten los cupos.">
     <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"> <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/1384/1384060.png">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
-    <style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet"><style>
         :root {
             --netflix: #E50914;
             --amazon: #00A8E1;
@@ -74,12 +73,11 @@
         header { text-align: center; margin-bottom: 40px; }
         .badge {
             background: linear-gradient(90deg, #ff0000, #ff4444);
-            padding: 6px 14px; border-radius: 20px;
-            font-size: 11px; font-weight: 800; letter-spacing: 1px;
+            padding: 5px 12px; border-radius: 20px;
+            font-size: 10px; font-weight: 800; letter-spacing: 1px;
             text-transform: uppercase;
-            box-shadow: 0 0 20px rgba(255,0,0,0.4);
+            box-shadow: 0 0 15px rgba(255,0,0,0.4);
             display: inline-block; margin-bottom: 15px;
-            border: 1px solid rgba(255,255,255,0.3);
         }
         h1 {
             font-size: 2.8rem; margin: 0; line-height: 1.1;
@@ -87,7 +85,7 @@
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             text-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
-        p.sub { color: #888; font-size: 0.95rem; margin-top: 10px; font-weight: 500; }
+        p.sub { color: #666; font-size: 0.95rem; margin-top: 10px; font-weight: 400; }
 
         /* Tarjetas de Plataforma */
         .platform-card {
@@ -152,7 +150,7 @@
         /* Footer */
         .footer {
             position: absolute; bottom: 20px;
-            font-size: 0.7rem; color: #444;
+            font-size: 0.7rem; color: #333;
             text-align: center; width: 100%;
         }
 
@@ -161,7 +159,7 @@
             position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
             background: rgba(0,0,0,0.8); padding: 8px 16px; border-radius: 30px;
             font-size: 0.75rem; border: 1px solid #333; display: flex; align-items: center; gap: 8px;
-            z-index: 10; animation: fadeInDown 1s ease; backdrop-filter: blur(5px);
+            z-index: 10; animation: fadeInDown 1s ease;
         }
         .dot { width: 8px; height: 8px; background: #0f0; border-radius: 50%; box-shadow: 0 0 10px #0f0; }
 
@@ -187,7 +185,7 @@
 
         <div class="platform-card netflix" onclick="goToStep1('Netflix')">
             <div class="logo-box">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" class="logo-img" alt="Netflix Gratis">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSsZLFW9PjmQSTrcc-BfDZL_8ENLgsuz3Ov0g&s" class="logo-img">
             </div>
             <div class="info">
                 <h3>Netflix 4K</h3>
@@ -198,18 +196,18 @@
 
         <div class="platform-card amazon" onclick="goToStep1('Amazon')">
             <div class="logo-box">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/f/f1/Prime_Video.png" class="logo-img" alt="Amazon Prime Gratis">
+                <img src="https://play-lh.googleusercontent.com/04rBJNzGde7ZS3Il2UTM-xZ1HueDTTiHiYzGtl2Ie_INZM-JK-n1EVKI5J74ZFgCGPg" class="logo-img">
             </div>
             <div class="info">
                 <h3>Amazon Prime</h3>
-                <span style="color: #5fafff;">1 Año • Envíos Gratis</span>
+                <span style="color: #5fafff;">1 Año • Peliculas Gratis</span>
             </div>
             <div class="btn-arrow">➜</div>
         </div>
 
         <div class="platform-card" style="border-color: rgba(17, 60, 207, 0.3);" onclick="goToStep1('Disney')">
             <div class="logo-box" style="background: linear-gradient(45deg, #113CCF, #fff);">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Disney%2B_logo.svg" class="logo-img" style="object-fit: contain; padding: 5px;" alt="Disney Plus Gratis">
+                <img src="https://www.personal.com.py/img/disney-plus/disney-logo-fondo.png" class="logo-img" style="object-fit: contain; padding: 5px;">
             </div>
             <div class="info">
                 <h3>Disney+</h3>
@@ -224,9 +222,9 @@
 
     <script>
         function goToStep1(platform) {
-            // Guardar preferencia
+            // Guardar preferencia (opcional para uso futuro)
             localStorage.setItem('selected_platform', platform);
-            // Redirigir al paso de WhatsApp
+            // Redirigir
             window.location.href = 'paso1_whatsapp.html';
         }
     </script>
