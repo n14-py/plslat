@@ -31,13 +31,17 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
+            /* CORRECCIÓN SCROLL: Se permite scroll vertical, se oculta horizontal */
+            overflow-y: auto; 
+            overflow-x: hidden;
             position: relative;
+            padding: 20px 0; /* Espacio extra arriba y abajo para que no quede pegado */
         }
 
         /* --- FONDO ANIMADO --- */
         .glow-bg {
-            position: absolute; width: 600px; height: 600px;
+            position: fixed; /* Fixed para que se quede quieto al hacer scroll */
+            width: 600px; height: 600px;
             background: radial-gradient(circle, rgba(229, 9, 20, 0.12) 0%, rgba(0,0,0,0) 70%);
             border-radius: 50%; top: 50%; left: 50%; transform: translate(-50%, -50%);
             z-index: 0; pointer-events: none; animation: pulse 6s infinite alternate;
@@ -225,16 +229,33 @@
     </div>
 
 <script>
-    let processStarted = false; // Evita reiniciar si hacen clic muchas veces
+    let processStarted = false; 
+    let startTime = null;
+    let timerInterval = null;
+    let currentLogIndex = -1; // Para rastrear qué logs ya se mostraron
+    const totalDuration = 80000; // 80 segundos en milisegundos
+
+    const logs = [
+        "Detectando portapapeles... OK",
+        "Esperando apertura de TikTok...",
+        "Monitoreando actividad en segundo plano...",
+        "Verificando comentario 1/10...",
+        "Verificando comentario 3/10...",
+        "Verificando comentario 5/10...",
+        "Verificando comentario 8/10...",
+        "Validando integridad del mensaje...",
+        "Conectando con servidor de cuentas...",
+        "¡Verificación completada con éxito!"
+    ];
 
     function iniciarProceso() {
         // 1. COPIAR AL PORTAPAPELES
         const text = document.getElementById('idCode').innerText;
         navigator.clipboard.writeText(text).then(() => {
-            showToast(); // Mostrar notificación
+            showToast(); 
         }).catch(err => {
             console.error('Error al copiar', err);
-            showToast(); // Mostrar igual para no romper la experiencia
+            showToast(); 
         });
 
         // 2. INICIAR LÓGICA (Solo si no ha empezado ya)
@@ -249,64 +270,57 @@
             document.getElementById('progBarBox').style.display = 'block';
             document.getElementById('percentage').style.display = 'block';
 
-            // Iniciar secuencia de tiempo (80 segundos)
-            startTimer();
+            // CORRECCIÓN: Usar tiempo real del sistema
+            startTime = Date.now();
+            
+            // Chequear cada 1 segundo (aunque el navegador se duerma, Date.now() es preciso)
+            timerInterval = setInterval(updateTimer, 1000);
+            updateTimer(); // Llamada inmediata
         }
     }
 
     function showToast() {
         const toast = document.getElementById('toastMsg');
         toast.classList.add('show');
-        
-        // Desaparecer automáticamente después de 3 segundos
         setTimeout(() => {
             toast.classList.remove('show');
         }, 3000);
     }
 
-    function startTimer() {
-        let percent = 0;
-        const logs = [
-            "Detectando portapapeles... OK",
-            "Esperando apertura de TikTok...",
-            "Monitoreando actividad en segundo plano...",
-            "Verificando comentario 1/10...",
-            "Verificando comentario 3/10...",
-            "Verificando comentario 5/10...",
-            "Verificando comentario 8/10...",
-            "Validando integridad del mensaje...",
-            "Conectando con servidor de cuentas...",
-            "¡Verificación completada con éxito!"
-        ];
+    function updateTimer() {
+        const currentTime = Date.now();
+        const elapsedTime = currentTime - startTime;
+        let percent = (elapsedTime / totalDuration) * 100;
 
-        let step = 0;
+        // Limitar a 100%
+        if (percent >= 100) {
+            percent = 100;
+            clearInterval(timerInterval);
+            finalizar();
+        }
+
+        updateProgress(percent);
+
+        // Lógica para mostrar logs basados en el progreso (aprox 1 log cada 10%)
+        // Esto asegura que si sales y vuelves, los logs se "ponen al día"
+        const logStage = Math.floor(percent / 10); // 0 a 10
         
-        // 8000ms = 8 segundos por paso (Total 80s aprox)
-        const interval = setInterval(() => {
-            if (step >= 10) {
-                clearInterval(interval);
-                finalizar();
-            } else {
-                percent += 10;
-                // Evitar overflow visual
-                if (percent > 100) percent = 100;
-                
-                // Agregar log solo si existe en el array
-                if (step < logs.length) {
-                    addLog(logs[step]);
-                }
-                
-                updateProgress(percent);
-                step++;
+        // Si avanzamos de etapa y hay logs pendientes
+        if (logStage > currentLogIndex && logStage <= logs.length) {
+            // Mostramos el log correspondiente
+            // (Si el usuario se fue mucho tiempo, solo mostramos el último relevante para no saturar)
+            if (logStage - 1 < logs.length) {
+                addLog(logs[logStage - 1]);
             }
-        }, 8000); 
+            currentLogIndex = logStage;
+        }
     }
 
     function addLog(text) {
+        if (!text) return;
         const consoleBox = document.getElementById('consoleBox');
         const line = document.createElement('div');
         
-        // Estilo según el tipo de mensaje
         let className = 'log-line';
         if (text.includes('OK') || text.includes('éxito')) className += ' success';
         else if (text.includes('Esperando') || text.includes('Monitoreando')) className += ' info';
@@ -319,14 +333,23 @@
     }
 
     function updateProgress(num) {
+        // Redondear para mostrar
+        let displayNum = Math.floor(num);
         document.getElementById('progFill').style.width = num + "%";
-        document.getElementById('percentage').innerText = num + "% completado";
+        document.getElementById('percentage').innerText = displayNum + "% completado";
     }
 
     function finalizar() {
+        // Asegurar que el último log esté presente
+        if (currentLogIndex < logs.length) {
+            addLog(logs[logs.length - 1]);
+        }
         document.getElementById('btnNext').style.display = 'block';
         document.getElementById('percentage').innerText = "✅ PROCESO FINALIZADO";
         document.getElementById('percentage').style.color = "#25D366";
+        
+        // Scroll automático hacia el botón final para que se vea
+        document.getElementById('btnNext').scrollIntoView({ behavior: 'smooth' });
     }
 </script>
 
